@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node-app
+  name: nodeapp-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - image: <your-backend-image-here>
+          name: backend-container
+          env:
+            - name: DATABASE_URL
+              value: mysql://<RDS-Username>:<RDS-password>@<RDS-endpoint>:3306/db
+          ports:
+            - containerPort: 3456
+      restartPolicy: Always
+status: {}

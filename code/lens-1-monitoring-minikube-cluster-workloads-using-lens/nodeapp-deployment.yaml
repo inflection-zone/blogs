@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node-app
+  name: nodeapp-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - args:
+            - bash
+            - -c
+            - while !</dev/tcp/mysqldb/3306; do sleep 20; done; npm run start:migrate
+          env:
+            - name: DATABASE_URL
+              value: mysql://<username>:<password>@mysqldb:3306/db?schema=public
+          image: <your-backend-service-image-here>
+          name: backend-container
+          ports:
+            - containerPort: 3456
+          resources: {}
+      restartPolicy: Always
+status: {}

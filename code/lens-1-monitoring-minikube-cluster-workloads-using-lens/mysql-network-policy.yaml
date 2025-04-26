@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mysql-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: mysql
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: node-app
+        - podSelector:
+            matchLabels:
+              app: adminer-app
+
+      ports:
+        - protocol: TCP
+          port: 3306

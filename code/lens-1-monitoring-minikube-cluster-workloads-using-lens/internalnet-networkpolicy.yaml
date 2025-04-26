@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: internalnet
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend-app
+  podSelector:
+    matchLabels:
+      app: node-app

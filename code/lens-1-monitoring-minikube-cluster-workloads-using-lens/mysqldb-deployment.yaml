@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql
+  name: mysqldb-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - args:
+            - --default-authentication-plugin=mysql_native_password
+          env:
+            - name: MYSQL_DATABASE
+              value: <your-database-name>
+            - name: MYSQL_PASSWORD
+              value: <your-database-password>
+            - name: MYSQL_ROOT_PASSWORD
+              value: <your-root-password>
+            - name: MYSQL_USER
+              value: <your-database-username>
+            - name: SERVICE_NAME
+              value: mysqldb
+          image: mysql:8.0
+          name: myuserdbcontainer
+          ports:
+            - containerPort: 3306
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+      restartPolicy: Always
+      volumes:
+        - name: db
+status: {}
